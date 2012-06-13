@@ -1,0 +1,143 @@
+<!--
+
+ OpenCart Ukrainian Community
+
+ LICENSE
+
+ This source file is subject to the GNU General Public License, Version 3
+ It is also available through the world-wide-web at this URL:
+ http://www.gnu.org/copyleft/gpl.html
+ If you did not receive a copy of the license and are unable to
+ obtain it through the world-wide-web, please send an email
+ to license@opencart.ua so we can send you a copy immediately.
+
+ @category   OpenCart
+ @package    OCU ICQ
+ @copyright  Copyright (c) 2011 Eugene Kuligin by OpenCart Ukrainian Community (http://opencart.ua)
+ @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License, Version 3
+
+
+ @category   OpenCart
+ @package    OCU ICQ
+ @copyright  Copyright (c) 2011 Eugene Kuligin by OpenCart Ukrainian Community (http://opencart.ua)
+ @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License, Version 3
+
+-->
+
+<modification>
+    <id>OCU ICQ</id>
+    <version>0.2.0</version>
+    <vqmver>2.0</vqmver>
+    <author>OpenCart Ukrainian Team</author>
+
+    <!-- admin:begin -->
+
+        <!-- controller:begin -->
+        <file name="admin/controller/setting/setting.php">
+            <operation>
+                <search position="after">
+                    <![CDATA[
+                        $this->data['heading_title'] = $this->language->get('heading_title');
+                    ]]>
+                </search>
+                <add>
+                    <![CDATA[
+                        $this->data['entry_icq'] = $this->language->get('entry_icq');
+                    ]]>
+                </add>
+            </operation>
+            <operation>
+                <search position="before">
+                    <![CDATA[
+                        if (isset($this->request->post['config_name'])) {
+                    ]]>
+                </search>
+                <add>
+                    <![CDATA[
+                        if (isset($this->request->post['config_icq'])) {
+                            $this->data['config_icq'] = $this->request->post['config_icq'];
+                        } else {
+                            $this->data['config_icq'] = $this->config->get('config_icq');
+                        }
+                    ]]>
+                </add>
+            </operation>
+            <operation>
+                <search position="before">
+                    <![CDATA[
+                        $this->data['breadcrumbs'] = array();
+                    ]]>
+                </search>
+                <add>
+                    <![CDATA[
+                        if (isset($this->error['icq'])) {
+                            $this->data['error_icq'] = $this->error['icq'];
+                        } else {
+                            $this->data['error_icq'] = '';
+                        }
+                    ]]>
+                </add>
+            </operation>
+            <operation>
+                <search position="after">
+                    <![CDATA[
+                        private function validate() {
+                    ]]>
+                </search>
+                <add>
+                    <![CDATA[
+                        if ((strlen(utf8_decode($this->request->post['config_icq'])) > 32)) {
+                            $this->error['icq'] = $this->language->get('error_icq');
+                        }
+                    ]]>
+                </add>
+            </operation>
+        </file>
+
+        <!-- controller:end -->
+
+        <!-- language:begin -->
+
+        <file name="admin/language/russian/setting/setting.php">
+            <operation>
+                <search position="after">
+                    <![CDATA[<?php]]>
+                </search>
+                <add>
+                    <![CDATA[
+                        $_['entry_icq'] = 'ICQ:';
+                        $_['error_icq'] = 'Длина поля "ICQ" превышает допустимое значение!';
+                    ]]>
+                </add>
+            </operation>
+        </file>
+
+        <!-- language:end -->
+
+        <!-- template:begin -->
+        <file name="admin/view/template/setting/setting.tpl">
+            <operation>
+                <search position="before">
+                    <![CDATA[<td><?php echo $entry_fax; ?></td>]]>
+                </search>
+                <add>
+                    <![CDATA[
+                        </tr>
+                        <tr>
+                            <td><?php echo $entry_icq; ?></td>
+                            <td><input type="text" name="config_icq" value="<?php echo $config_icq; ?>" />
+                            <?php if ($error_icq) { ?>
+                                <span class="error"><?php echo $error_icq; ?></span>
+                            <?php } ?></td>
+                        </tr>
+                        <tr>
+                    ]]>
+                </add>
+            </operation>
+        </file>
+
+        <!-- template:end -->
+
+    <!-- admin:end -->
+
+</modification>
